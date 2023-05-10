@@ -1,0 +1,386 @@
+// Niazy Bitmoji
+noStroke();
+var myBitmoji = function(bitmojiX,bitmojiY, Height){
+noStroke();
+
+fill(255, 227, 159); //skin tone.
+ellipse(bitmojiX-45+(Height/100*146),bitmojiY-27+(Height/100*121),Height/100*107,Height/100*127); //face.
+ellipse(bitmojiX-45+(Height/100*146),bitmojiY-27+(Height/100*180),Height/100*57,Height/100*20); //neck.
+ellipse(bitmojiX-45+(Height/100*121),bitmojiY-27+(Height/100*175),Height/100*9,Height/100*19);
+ellipse(bitmojiX-45+(Height/100*171),bitmojiY-27+(Height/100*175),Height/100*9,Height/100*19);
+
+
+fill(44, 22, 8); //hair tone.
+bezier(bitmojiX-45+(Height/100*93),bitmojiY-27+(Height/100*122),bitmojiX-45+(Height/100*82),bitmojiY-27+(Height/100*70),bitmojiX-45+(Height/100*114),bitmojiY-27+(Height/100*64),bitmojiX-45+(Height/100*124),bitmojiY-27+(Height/100*64)); //left hair.
+ellipse(bitmojiX-45+(Height/100*144),bitmojiY-27+(Height/100*74),Height/100*67,Height/100*37);//top hair.
+ellipse(bitmojiX-45+(Height/100*128),bitmojiY-27+(Height/100*84),Height/100*47,Height/100*16);//top hair.
+bezier(bitmojiX-45+(Height/100*200),bitmojiY-27+(Height/100*113),bitmojiX-45+(Height/100*190),bitmojiY-27+(Height/100*24),bitmojiX-45+(Height/100*90),bitmojiY-27+(Height/100*62),bitmojiX-45+(Height/100*158),bitmojiY-27+(Height/100*71));//right hair
+fill(255, 227, 159);
+ellipse(bitmojiX-45+(Height/100*160),bitmojiY-27+(Height/100*111),(Height/100*(-51)),Height/100*58);
+
+fill(44, 22, 8);
+arc(bitmojiX-45+(Height/100*125),bitmojiY-27+(Height/100*113),Height/100*31,Height/100*(-7),-7,190);
+arc(bitmojiX-45+(Height/100*166),bitmojiY-27+(Height/100*113),Height/100*31,Height/100*(-7),-7,190);
+
+fill(0, 0, 0);
+ellipse(bitmojiX-45+(Height/100*124),bitmojiY-27+(Height/100*120),Height/100*22,Height/100*6);
+ellipse(bitmojiX-45+(Height/100*167),bitmojiY-27+(Height/100*120),Height/100*22,Height/100*6);
+fill(255,255, 255);
+ellipse(bitmojiX-45+(Height/100*124),bitmojiY-27+(Height/100*120),Height/100*15,Height/100*6); // left eye whiteness
+ellipse(bitmojiX-45+(Height/100*167),bitmojiY-27+(Height/100*120),Height/100*15,Height/100*6); // right eye whiteness
+
+fill(75,114,72);
+ellipse(bitmojiX-45+(Height/100*124),bitmojiY-27+(Height/100*120),Height/100*7,Height/100*5); // left eye
+ellipse(bitmojiX-45+(Height/100*167),bitmojiY-27+(Height/100*120),Height/100*7,Height/100*5); // right eye
+
+fill(255, 255, 255);
+arc(bitmojiX-45+(Height/100*147),bitmojiY-27+(Height/100*159),Height/100*32,Height/100*16,0,180); //mouth
+
+stroke(0, 0, 0);
+fill(255, 227, 159);
+bezier(bitmojiX-45+(Height/100*147),bitmojiY-27+(Height/100*127),bitmojiX-45+(Height/100*156),bitmojiY-27+(Height/100*150),bitmojiX-45+(Height/100*136),bitmojiY-27+(Height/100*166),bitmojiX-45+(Height/100*145),bitmojiY-27+(Height/100*118)); // nose
+
+noStroke();
+fill(18, 161, 201);
+rect(bitmojiX-45+(Height/100*94),bitmojiY-27+(Height/100*185),Height/100*105,Height/100*83,Height/100*28); //shirt
+image(getImage("avatars/leaf-grey"), bitmojiX-45+(Height/100*94), bitmojiY-27+(Height/100*201), Height/100*113, Height/100*46); //shirt mark
+
+fill(0, 0, 0);
+stroke(255, 0, 0);
+textFont("serif",Height/100*37);
+text("HN",bitmojiX-45+(Height/100*122),bitmojiY-27+(Height/100*236),Height/100*53,Height/100*54);
+
+fill(255, 227, 159);
+arc(bitmojiX-45+(Height/100*146),bitmojiY-27+(Height/100*185),Height/100*57,Height/100*30,-3,185);//neck
+
+noStroke();
+};
+
+// Niazy Bitmoji
+
+var scenes = 0;
+var score = 0;
+var level = 1;
+var startTime = millis(); 
+var lives = 3;
+
+// Button Class
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 100;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(255, 255, 255);
+    rect(this.x, this.y, this.width, this.height, 10);
+    fill(0, 0, 0);
+    textSize(19);
+    text(this.label, this.x + 10 , this.y+this.height/1.6);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var SuperButton = new Button ({
+    x: 300,
+    y: 340,
+    label: "START",
+    width: 80,
+    height: 40,
+    onClick: function(){
+        
+     startTime = millis();
+     scenes = 1;
+        
+    }
+    
+});
+
+var pauseButton = new Button({
+    x: 3,
+    y: 190,
+    label:"Pause",
+    width: 75,
+    height: 30,
+     
+    onClick: function(){
+        
+    scenes = 2;
+        
+    }
+});
+
+var resumeButton = new Button ({
+    x: 145,
+    y: 60,
+    label: "Resume",
+    width: 90,
+    height: 45,
+    
+    onClick: function(){
+    
+    scenes = 4;    
+        
+    }
+});
+
+
+var restartButton = new Button ({
+    x: 135,
+    y: 280,
+    label: "Play Again",
+    width: 110,
+    height: 45,
+    
+    onClick: function(){
+    
+    scenes = 0;
+    lives = 3;
+    
+    }
+});
+
+// Button Class
+
+mouseClicked = function(){
+    
+    SuperButton.handleMouseClick();
+    pauseButton.handleMouseClick();
+    resumeButton.handleMouseClick();
+    restartButton.handleMouseClick();
+
+};
+
+//Game Settings
+
+var Bitmoji = function(x, y) {
+    this.x = mouseX;
+    this.y = y;
+    this.img = myBitmoji(this.x, this.y, 30);
+    
+};
+
+Bitmoji.prototype.draw = function() {
+    this.y = constrain(this.y, 0 , height-50);
+    myBitmoji(this.x, this.y, 30);
+};
+
+Bitmoji.prototype.checkForGemGrab = function(gem) {
+    if ((gem.x >= this.x - 50  && gem.x <= (this.x + 15)) &&
+        (gem.y >= this.y - 50 && gem.y <= (this.y + 20))) {
+        gem.y = -10000;
+        gem.x = round(random(80,370));
+        score++;
+    }
+    
+    if (gem.x >= 79 && gem.y >= height*0.95 && gem.x <= width){
+        
+        gem.y = -10000;
+        gem.x = round(random(80,370));
+        lives--;
+        
+    }
+};
+
+
+var Gem = function(x, y) {
+    
+    this.x = x;
+    this.y = y;
+};
+
+Gem.prototype.draw = function() {
+    
+    fill(10, 193, 199);
+   
+    rect(this.x, this.y, 20, 25);
+    image(getImage("cute/GemOrange"), this.x, this.y, 30, 40);
+};
+
+var gems = [];
+for (var i = 0; i < 100; i++) {  
+    gems.push(new Gem(round(random(80,370)), (i * 228 - 22650) ));
+}
+
+
+//Game Settings
+
+var splash = function()
+{
+    noStroke();
+    background (0, 19, 189);
+    image(getImage("cute/GemBlue"), -18, -240, 445, 680);
+    fill(0, 0, 0);
+    textSize(35);
+    text("$_GEM GAME_$",60,155);
+    textSize(17);
+    text("Collect as many GEMS as you can!!!", 25, 190);
+    text("you have 3 lives, if a gem falls you lose one live. each gem worth $12 Dollars.", 25, 210, 300, 200);
+    text("Click on START to Begin.", 100, 307);
+    textSize(25);
+    text("By: Hassinullah Niazy", 25, 275);
+    myBitmoji(160, 10, 50);
+    // startButton.draw();
+    SuperButton.draw();
+};
+
+var gamePlay = function()
+{
+    noStroke();
+    background(10, 193, 199);
+    
+    var bitmoji = new Bitmoji(mouseX, 340); 
+    
+    for (var i = 0; i < gems.length; i++) {
+        gems[i].draw();
+        bitmoji.checkForGemGrab(gems[i]);
+        gems[i].y += 3;
+    }
+    
+    fill(0, 130, 13);
+    rect(79, height*0.95, width, height*0.10);
+    bitmoji.draw();
+  
+    fill(0, 0, 0);
+    rect(-1,-1,82,401); // Scoreboard
+    fill(255, 255, 255);
+    textSize(15);
+    text("Score: "+score, 5, 70);
+    text("Level : "+level, 5, 90);
+    text("Time: "+ round((millis() - startTime)/1000), 5, 115);
+    text("Lives: "+ lives, 5, 140);
+    image(getImage("space/healthheart"), 5, 150, 20, 20);
+    image(getImage("space/healthheart"), 30, 150, 20, 20);
+    image(getImage("space/healthheart"), 55, 150, 20, 20);
+    
+    fill(255, 0, 0);
+    textSize(30);
+    text("H7N", 8, 300);
+    fill(255, 355, 0);
+    textSize(15);
+    text("Niazy", 20, 305);
+    text("Collect Gems", 15, 5, 60, 37);
+    
+    // Afghanistan Flag
+    fill(255, 255, 255);
+    rect(2, 320, 75, 50, 2);
+    fill(0, 0, 0);
+    rect(4, 323, 69, 44);
+    fill(255, 0, 0);
+    rect(27, 323, 25, 44);
+    fill(0, 189, 0);
+    rect(51, 323, 24, 44);
+    
+    pauseButton.draw();
+    
+    if (lives === 2){
+        
+        fill(0, 0, 0);
+        ellipse(65,160,25,25);
+    }
+    else if (lives === 1){
+        fill(0, 0, 0);
+        ellipse(65,160,25,25);
+        ellipse(40,160,25,25);
+    }
+    else if (lives === 0){
+        fill(0, 0, 0);
+        ellipse(65,160,25,25);
+        ellipse(40,160,25,25);
+        ellipse(15,160,25,25);
+        scenes = 3;
+        
+    }
+    if (score >= 50)
+    {
+        level = 2;
+    }
+    
+    if (score >= 100){
+        
+        level = 3;
+        for (var i = 1; i < gems.length; i++) {
+        gems[i].draw();
+        bitmoji.checkForGemGrab(gems[i]);
+        gems[i].y += 4;
+        
+    }
+    
+    
+    }
+    
+};
+
+ var pauseMenu = function() {
+            
+        background(255, 149, 0);
+        image(getImage("cute/GemOrange"), -18, -240, 420, 685);
+        textSize(50);
+        text("Game Paused!", 35, 160);
+        textSize(25);
+        text("Press Resume to restart!", 58, 220);
+        resumeButton.draw();
+        };
+
+var gameOver = function ()
+{
+    background(64, 153, 0);
+    image(getImage("cute/GemGreen"), -18, -240, 420, 685);
+    fill(0, 0, 0);
+    textSize(50);
+    text("Game Over!", 60, 180);
+    textSize(15);
+    text("Gems Collected: "+score, 130, 80);
+    text("Gems Worth: "+score*12+" $", 130, 110);
+    textSize(23);
+    text("Thank you for playing!", 80, 220);
+    text("Written by: Hassinullah Niazy", 50, 260);
+    restartButton.draw();
+
+};
+
+
+draw = function() {
+    
+    if (scenes === 0){
+        
+        splash();
+        
+    }
+    else if (scenes === 1)
+    {
+        gamePlay();
+    }
+    
+    else if (scenes === 2)
+    {
+       
+        pauseMenu();
+    }
+    else if (scenes === 3)
+    {
+        gameOver();
+        
+    }
+    else if (scenes === 4)
+    {
+        gamePlay();
+    }
+    
+    
+};
